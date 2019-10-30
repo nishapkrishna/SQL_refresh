@@ -1,25 +1,35 @@
--- Q: How many people have rented the film _Blanket Beverly_?
+-- Question 1
 
- SELECT COUNT(*)
- FROM customer
- WHERE customer_id IN
- (
-  SELECT customer_id
-  FROM payment
-  WHERE rental_id IN
+SELECT city, city_id
+FROM city
+WHERE city IN ('Qalyub', 'Qinhuangdao', 'Qomsheh', 'Quilmes');
+
+
+-- Question 2
+
+SELECT district
+FROM address
+WHERE city_id IN
+(
+  SELECT city_id
+  FROM city
+  WHERE city IN ('Qalyub', 'Qinhuangdao', 'Qomsheh', 'Quilmes')
+);
+
+
+-- Bonus
+
+SELECT first_name, last_name
+FROM customer cus
+WHERE address_id IN
+(
+  SELECT address_id
+  FROM address a
+  WHERE city_id IN
   (
-   SELECT rental_id
-   FROM rental
-   WHERE inventory_id IN
-   (
-    SELECT inventory_id
-    FROM inventory
-    WHERE film_id IN
-    (
-     SELECT film_id
-     FROM film
-     WHERE title = 'Blanket Beverly'
-    )
-   )
-  )
- );
+    SELECT city_id
+    FROM city 
+    WHERE city LIKE 'Q%'
+  ) 
+);
+
